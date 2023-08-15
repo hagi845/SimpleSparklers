@@ -9,19 +9,15 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         musicAudioSource = GetComponent<AudioSource>();
-
-        PlayBackgroundMusic();
     }
 
-    public void PlayBackgroundMusic()
+    public void Play()
     {
-        if (!musicAudioSource.isPlaying)
-        {
-            musicAudioSource.Play();
-        }
+        if (musicAudioSource.isPlaying) musicAudioSource.Stop();
+        musicAudioSource.Play();
     }
 
-    public void StopBackgroundMusic()
+    public void Stop()
     {
         if (musicAudioSource != null && musicAudioSource.isPlaying)
         {
