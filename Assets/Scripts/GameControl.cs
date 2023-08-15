@@ -18,11 +18,22 @@ public class GameControl : MonoBehaviour
     private GameObject currentBlock;
     private KeyCode lastKeyPressed = KeyCode.None;
 
+    private AudioManager backGroundMusic;
+    private AudioManager sparkSound;
+
     public static GameControl Instance { get; private set; }
 
     private void Start()
     {
         Instance = this;
+
+        var background = GameObject.Find("BackGroundMusic");
+        if (background != null) backGroundMusic = background.GetComponent<AudioSource>().GetComponent<AudioManager>();
+        backGroundMusic.Play();
+
+        var spark = GameObject.Find("SparkSound");
+        if (spark != null) sparkSound = spark.GetComponent<AudioManager>();
+
         currentBlock = Instantiate(blockObjectPrefab, CreateRandomVectorRight(), Quaternion.identity);
     }
 
@@ -38,6 +49,7 @@ public class GameControl : MonoBehaviour
                 GameOver();
                 return; 
             }
+            sparkSound.Play();
             currentBlock.transform.position = CreateRandomVectorLeft();
             lastKeyPressed = KeyCode.LeftArrow;
         }
@@ -48,6 +60,7 @@ public class GameControl : MonoBehaviour
                 GameOver();
                 return;
             }
+            sparkSound.Play();
             currentBlock.transform.position = CreateRandomVectorRight();
             lastKeyPressed = KeyCode.RightArrow;
         }
@@ -65,6 +78,7 @@ public class GameControl : MonoBehaviour
     public void GameOver()
     {
         GameOverDialog.SetActive(true);
+        backGroundMusic.Stop();
     }
 
     private bool CheckOverlap()
