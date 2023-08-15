@@ -3,6 +3,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     public float Speed = 5;
+    public float incrementSpeed = 0.01f;
 
     private Rigidbody rb;
 
@@ -16,10 +17,12 @@ public class Ball : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftArrow))
         {
+            Speed += incrementSpeed;
             rb.velocity = new Vector2(-Speed, rb.velocity.y);
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
+            Speed += incrementSpeed;
             rb.velocity = new Vector2(Speed, rb.velocity.y);
         }
     }
