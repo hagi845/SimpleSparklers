@@ -14,6 +14,7 @@ public class GameControl : MonoBehaviour
     public GameObject ball;
 
     private float positionY = -3.9f;
+    private float minBlockWidth = 0.35f;
 
     private GameObject currentBlock;
     private KeyCode lastKeyPressed = KeyCode.None;
@@ -50,6 +51,7 @@ public class GameControl : MonoBehaviour
                 return; 
             }
             sparkSound.Play();
+            ChangeBlockWidth();
             currentBlock.transform.position = CreateRandomVectorLeft();
             lastKeyPressed = KeyCode.LeftArrow;
         }
@@ -61,6 +63,7 @@ public class GameControl : MonoBehaviour
                 return;
             }
             sparkSound.Play();
+            ChangeBlockWidth();
             currentBlock.transform.position = CreateRandomVectorRight();
             lastKeyPressed = KeyCode.RightArrow;
         }
@@ -89,4 +92,12 @@ public class GameControl : MonoBehaviour
         return ballBounds.Intersects(barBounds);
     }
 
+    private void ChangeBlockWidth()
+    {
+        Vector2 currentScale = currentBlock.transform.localScale;
+
+        if (currentScale.x <= minBlockWidth) return;
+        currentScale.x -= 0.01f;
+        currentBlock.transform.localScale = currentScale;
+    }
 }
