@@ -9,14 +9,19 @@ public class GameControl : MonoBehaviour
     /// </summary>
     public GameObject blockObjectPrefab;
 
+    public GameObject GameOverDialog;
+
     private float positionY = -3.9f;
     private float positionZ = 2.0f;
 
     private GameObject currentBlock;
-    private KeyCode lastKeyPressed = KeyCode.None; 
+    private KeyCode lastKeyPressed = KeyCode.None;
+
+    public static GameControl Instance { get; private set; }
 
     private void Start()
     {
+        Instance = this;
         currentBlock = Instantiate(blockObjectPrefab, CreateRandomVectorRight(), Quaternion.identity);
     }
 
@@ -43,5 +48,10 @@ public class GameControl : MonoBehaviour
     {
         float randomX = Random.Range(minX, maxX);
         return new Vector3(randomX, positionY, positionZ);
+    }
+
+    public void GameOver()
+    {
+        GameOverDialog.SetActive(true);
     }
 }
