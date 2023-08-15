@@ -18,11 +18,20 @@ public class GameControl : MonoBehaviour
     private GameObject currentBlock;
     private KeyCode lastKeyPressed = KeyCode.None;
 
+    private AudioManager audioManager;
+
     public static GameControl Instance { get; private set; }
 
     private void Start()
     {
         Instance = this;
+
+        var audio = GameObject.Find("Audio");
+        if (audio != null)
+        {
+            audioManager = audio.GetComponent<AudioManager>();
+        }
+
         currentBlock = Instantiate(blockObjectPrefab, CreateRandomVectorRight(), Quaternion.identity);
     }
 
@@ -65,6 +74,7 @@ public class GameControl : MonoBehaviour
     public void GameOver()
     {
         GameOverDialog.SetActive(true);
+        audioManager.StopBackgroundMusic();
     }
 
     private bool CheckOverlap()
