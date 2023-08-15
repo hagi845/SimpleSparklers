@@ -722,6 +722,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockObjectPrefab: {fileID: 817305680163145423, guid: 46970b838b934465dbaa4e526627c1e1, type: 3}
   GameOverDialog: {fileID: 333275101}
+  ball: {fileID: 486672320}
 --- !u!4 &1282537686
 Transform:
   m_ObjectHideFlags: 0
