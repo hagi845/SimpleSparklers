@@ -10,7 +10,7 @@ public class Retry : MonoBehaviour
     {
         GetComponent<Button>().onClick.AddListener(() =>
         {
-            SceneManager.LoadScene("SampleScene");
+            SceneManager.LoadScene("GameScene");
         });
     }
 }
