@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour
 {
@@ -13,6 +15,9 @@ public class GameControl : MonoBehaviour
 
     public GameObject ball;
 
+    public TextMeshProUGUI scoreBoard;
+    
+
     private float positionY = -3.9f;
     private float minBlockWidth = 0.35f;
 
@@ -21,6 +26,8 @@ public class GameControl : MonoBehaviour
 
     private AudioManager backGroundMusic;
     private AudioManager sparkSound;
+
+    private long score;
 
     public static GameControl Instance { get; private set; }
 
@@ -53,6 +60,7 @@ public class GameControl : MonoBehaviour
             sparkSound.Play();
             ChangeBlockWidth();
             currentBlock.transform.position = CreateRandomVectorLeft();
+            ChangeScore();
             lastKeyPressed = KeyCode.LeftArrow;
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow) && lastKeyPressed != KeyCode.RightArrow)
@@ -65,6 +73,7 @@ public class GameControl : MonoBehaviour
             sparkSound.Play();
             ChangeBlockWidth();
             currentBlock.transform.position = CreateRandomVectorRight();
+            ChangeScore();
             lastKeyPressed = KeyCode.RightArrow;
         }
     }
@@ -99,5 +108,11 @@ public class GameControl : MonoBehaviour
         if (currentScale.x <= minBlockWidth) return;
         currentScale.x -= 0.01f;
         currentBlock.transform.localScale = currentScale;
+    }
+
+    private void ChangeScore()
+    {
+        score += 100;
+        scoreBoard.text = score.ToString();
     }
 }
