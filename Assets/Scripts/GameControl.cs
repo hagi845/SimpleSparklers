@@ -22,7 +22,7 @@ public class GameControl : MonoBehaviour
     private float minBlockWidth = 0.35f;
 
     private GameObject currentBlock;
-    private KeyCode lastKeyPressed = KeyCode.None;
+    private KeyCode lastKeyPressed = KeyCode.RightArrow;
 
     private AudioManager backGroundMusic;
     private AudioManager sparkSound;
