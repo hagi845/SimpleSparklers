@@ -15,18 +15,16 @@ public class Ball : MonoBehaviour
 
     void Start()
     {
-        rb.velocity = new Vector2(speed, 0);
+        SetVelocity(speed);
     }
 
     void Update()
     {
-        // NOTE: ?????????????????????????????????
-        //if (GameControl.Instance.IsGameOver()) return;
-
         if (Input.GetKeyDown(KeyCode.LeftArrow) && lastKeyPressed != KeyCode.LeftArrow)
         {
             speed += incrementSpeed;
             SetVelocity(-speed);
+
             lastKeyPressed = KeyCode.LeftArrow;
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow) && lastKeyPressed != KeyCode.RightArrow)
