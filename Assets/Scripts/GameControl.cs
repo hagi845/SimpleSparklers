@@ -16,7 +16,8 @@ public class GameControl : MonoBehaviour
     public GameObject ball;
 
     public TextMeshProUGUI scoreBoard;
-    
+
+    public int playerLife = 3;
 
     private float positionY = -3.9f;
     private float minBlockWidth = 0.35f;
@@ -50,14 +51,23 @@ public class GameControl : MonoBehaviour
         if (GameOverDialog.activeSelf) return;
         if (currentBlock == null) return;
 
+        // HACK: 重複しまくり
         if (Input.GetKeyDown(KeyCode.LeftArrow) && lastKeyPressed != KeyCode.LeftArrow)
         {
             if (!CheckOverlap())
             {
-                GameOver();
-                return; 
+                if(playerLife == 0)
+                {
+                    GameOver();
+                    return;
+                }
+                playerLife--;
             }
-            sparkSound.Play();
+            else
+            {
+                sparkSound.Play();
+            }
+
             ChangeBlockWidth();
             currentBlock.transform.position = CreateRandomVectorLeft();
             ChangeScore();
@@ -67,10 +77,18 @@ public class GameControl : MonoBehaviour
         {
             if (!CheckOverlap())
             {
-                GameOver();
-                return;
+                if (playerLife == 0)
+                {
+                    GameOver();
+                    return;
+                }
+                playerLife--;
             }
-            sparkSound.Play();
+            else
+            {
+                sparkSound.Play();
+            }
+
             ChangeBlockWidth();
             currentBlock.transform.position = CreateRandomVectorRight();
             ChangeScore();

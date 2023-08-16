@@ -1215,6 +1215,7 @@ MonoBehaviour:
   GameOverDialog: {fileID: 333275101}
   ball: {fileID: 486672320}
   scoreBoard: {fileID: 1031043770}
+  playerLife: 3
 --- !u!4 &1282537686
 Transform:
   m_ObjectHideFlags: 0
@@ -1672,6 +1673,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 461461413223243773, guid: a9b23206e9d18425fadc574fced47187, type: 3}
+      propertyPath: playerLife
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 461461413223243773, guid: a9b23206e9d18425fadc574fced47187, type: 3}
       propertyPath: blockObjectPrefab
       value: 
