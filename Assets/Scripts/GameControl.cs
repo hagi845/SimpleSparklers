@@ -71,11 +71,11 @@ public class GameControl : MonoBehaviour
             else
             {
                 sparkSound.Play();
+                ChangeScore();
+                ChangeBlockWidth();
             }
 
-            ChangeBlockWidth();
             currentBlock.transform.position = CreateRandomVectorLeft();
-            ChangeScore();
             lastKeyPressed = KeyCode.LeftArrow;
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow) && lastKeyPressed != KeyCode.RightArrow)
@@ -93,11 +93,11 @@ public class GameControl : MonoBehaviour
             else
             {
                 sparkSound.Play();
+                ChangeScore();
+                ChangeBlockWidth();
             }
 
-            ChangeBlockWidth();
             currentBlock.transform.position = CreateRandomVectorRight();
-            ChangeScore();
             lastKeyPressed = KeyCode.RightArrow;
         }
     }
