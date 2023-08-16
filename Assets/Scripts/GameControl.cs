@@ -2,47 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: 責務が多すぎる このクラスは何者なのか不明
 public class GameControl : MonoBehaviour
 {
-    /// <summary>
-    /// ブロックのプレハブ
-    /// </summary>
-    public GameObject blockObjectPrefab;
-
-    public GameObject GameOverDialog;
-
-    public GameObject ball;
-
-    private float positionY = -3.9f;
-    private float minBlockWidth = 0.35f;
-
     private GameObject currentBlock;
     private KeyCode lastKeyPressed = KeyCode.None;
-
     private AudioManager backGroundMusic;
     private AudioManager sparkSound;
 
+    public GameObject blockPrefab;
+    public GameObject gameOverCanvas;
+    public GameObject ball; // TODO: ブロック同様プレハブで生成する方が良いか
+
     public static GameControl Instance { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         Instance = this;
 
-        var background = GameObject.Find("BackGroundMusic");
-        if (background != null) backGroundMusic = background.GetComponent<AudioSource>().GetComponent<AudioManager>();
+        backGroundMusic = GameObject.Find("BackGroundMusic").GetComponent<AudioManager>();
+        sparkSound = GameObject.Find("SparkSound").GetComponent<AudioManager>();
+    }
+
+    private void Start()
+    {
+        // 初期設定
         backGroundMusic.Play();
-
-        var spark = GameObject.Find("SparkSound");
-        if (spark != null) sparkSound = spark.GetComponent<AudioManager>();
-
-        currentBlock = Instantiate(blockObjectPrefab, CreateRandomVectorRight(), Quaternion.identity);
+        currentBlock = Instantiate(blockPrefab, CreateRandomVectorRight(), Quaternion.identity);
     }
 
     private void Update()
-    {
-        if (GameOverDialog.activeSelf) return;
-        if (currentBlock == null) return;
+    {   
+        if (gameOverCanvas.activeSelf) return;
 
+        // TODO: 重複コード
         if (Input.GetKeyDown(KeyCode.LeftArrow) && lastKeyPressed != KeyCode.LeftArrow)
         {
             if (!CheckOverlap())
@@ -72,18 +65,34 @@ public class GameControl : MonoBehaviour
     private Vector2 CreateRandomVectorLeft() => CreateRandomVector(-6.5f, -1.5f);
     private Vector2 CreateRandomVectorRight() => CreateRandomVector(1.5f, 6.5f);
 
+    /// <summary>
+    /// 指定した範囲内でランダムなVectorを生成する
+    /// </summary>
+    /// <param name="minX"></param>
+    /// <param name="maxX"></param>
+    /// <returns></returns>
     private Vector2 CreateRandomVector(float minX, float maxX)
     {
-        float randomX = Random.Range(minX, maxX);
+        var randomX = Random.Range(minX, maxX);
+        var positionY = -3.9f;
         return new Vector2(randomX, positionY);
     }
 
+    /// <summary>
+    /// ゲームオーバー
+    /// TODO: ゲームオーバー単体のスクリプトにした方がいい？
+    /// </summary>
     public void GameOver()
     {
-        GameOverDialog.SetActive(true);
+        gameOverCanvas.SetActive(true);
         backGroundMusic.Stop();
     }
 
+    /// <summary>
+    /// ボールとブロックが接触しているか
+    /// TODO: 専用のスクリプトを作った方がいいのか
+    /// </summary>
+    /// <returns></returns>
     private bool CheckOverlap()
     {
         Bounds ballBounds = ball.GetComponent<Renderer>().bounds;
@@ -92,9 +101,14 @@ public class GameControl : MonoBehaviour
         return ballBounds.Intersects(barBounds);
     }
 
+    /// <summary>
+    /// ブロックの幅を狭くする
+    /// TODO: ブロック自身の責務？
+    /// </summary>
     private void ChangeBlockWidth()
     {
         Vector2 currentScale = currentBlock.transform.localScale;
+        var  minBlockWidth = 0.35f;
 
         if (currentScale.x <= minBlockWidth) return;
         currentScale.x -= 0.01f;

@@ -590,7 +590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64810b982bdcf405cab1f3c55822b790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
+  speed: 5
   incrementSpeed: 0.01
 --- !u!54 &486672324
 Rigidbody:
@@ -1076,8 +1076,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cad94945408f40ac848c04e580f389a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockObjectPrefab: {fileID: 817305680163145423, guid: 46970b838b934465dbaa4e526627c1e1, type: 3}
-  GameOverDialog: {fileID: 333275101}
+  blockPrefab: {fileID: 817305680163145423, guid: 46970b838b934465dbaa4e526627c1e1, type: 3}
+  gameOverCanvas: {fileID: 333275101}
   ball: {fileID: 486672320}
 --- !u!4 &1282537686
 Transform:
