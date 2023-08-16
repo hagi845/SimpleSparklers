@@ -27,6 +27,7 @@ public class GameControl : MonoBehaviour
 
     private AudioManager backGroundMusic;
     private AudioManager sparkSound;
+    private AudioManager missSound;
 
     private long score;
 
@@ -42,6 +43,9 @@ public class GameControl : MonoBehaviour
 
         var spark = GameObject.Find("SparkSound");
         if (spark != null) sparkSound = spark.GetComponent<AudioManager>();
+
+        var miss = GameObject.Find("MissSound");
+        if (miss != null) missSound = miss.GetComponent<AudioManager>();
 
         currentBlock = Instantiate(blockObjectPrefab, CreateRandomVectorRight(), Quaternion.identity);
     }
@@ -62,6 +66,7 @@ public class GameControl : MonoBehaviour
                     return;
                 }
                 playerLife--;
+                missSound.Play();
             }
             else
             {
@@ -83,6 +88,7 @@ public class GameControl : MonoBehaviour
                     return;
                 }
                 playerLife--;
+                missSound.Play();
             }
             else
             {
