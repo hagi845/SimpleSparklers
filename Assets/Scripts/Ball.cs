@@ -2,34 +2,37 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    public float Speed = 5;
+    public float speed = 5.0f;
     public float incrementSpeed = 0.01f;
 
     private Rigidbody rb;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        rb.velocity = new Vector2(Speed,  0);
+    }
+
+    void Start()
+    {
+        rb.velocity = new Vector2(speed, 0);
     }
 
     void Update()
     {
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            Speed += incrementSpeed;
-            rb.velocity = new Vector2(-Speed, rb.velocity.y);
+            speed += incrementSpeed;
+            SetVelocity(-speed);
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
-            Speed += incrementSpeed;
-            rb.velocity = new Vector2(Speed, rb.velocity.y);
+            speed += incrementSpeed;
+            SetVelocity(speed);
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void SetVelocity(float xVelocity)
     {
-        // TODO: 
-        Debug.Log("gameover???");
+        rb.velocity = new Vector2(xVelocity, 0);
     }
 }
