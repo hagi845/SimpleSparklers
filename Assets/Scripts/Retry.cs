@@ -13,9 +13,4 @@ public class Retry : MonoBehaviour
             SceneManager.LoadScene("SampleScene");
         });
     }
-
-    void Update()
-    {
-        
-    }
 }
