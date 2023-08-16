@@ -6,7 +6,7 @@ public class Ball : MonoBehaviour
     public float incrementSpeed = 0.01f;
 
     private Rigidbody rb;
-    private KeyCode lastKeyPressed = KeyCode.None;
+    private KeyCode lastKeyPressed = KeyCode.RightArrow;
 
     void Awake()
     {
@@ -20,6 +20,9 @@ public class Ball : MonoBehaviour
 
     void Update()
     {
+        // NOTE: ?????????????????????????????????
+        //if (GameControl.Instance.IsGameOver()) return;
+
         if (Input.GetKeyDown(KeyCode.LeftArrow) && lastKeyPressed != KeyCode.LeftArrow)
         {
             speed += incrementSpeed;

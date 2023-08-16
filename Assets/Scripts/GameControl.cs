@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameControl : MonoBehaviour
 {
     private GameObject currentBlock;
-    private KeyCode lastKeyPressed = KeyCode.None;
+    private KeyCode lastKeyPressed = KeyCode.RightArrow;
     private AudioManager backGroundMusic;
     private AudioManager sparkSound;
 
@@ -33,7 +33,7 @@ public class GameControl : MonoBehaviour
 
     private void Update()
     {   
-        if (gameOverCanvas.activeSelf) return;
+        if (IsGameOver()) return;
 
         // TODO: 重複コード
         if (Input.GetKeyDown(KeyCode.LeftArrow) && lastKeyPressed != KeyCode.LeftArrow)
@@ -87,6 +87,8 @@ public class GameControl : MonoBehaviour
         gameOverCanvas.SetActive(true);
         backGroundMusic.Stop();
     }
+
+    public bool IsGameOver() => gameOverCanvas.activeSelf;
 
     /// <summary>
     /// ボールとブロックが接触しているか
