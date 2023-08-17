@@ -19,6 +19,9 @@ public class GameControl : MonoBehaviour
 
     public int playerLife = 3;
 
+    public AudioClip successSE;
+    public AudioClip failureSE;
+
     private float positionY = -3.9f;
     private float minBlockWidth = 0.35f;
 
@@ -26,12 +29,17 @@ public class GameControl : MonoBehaviour
     private KeyCode lastKeyPressed = KeyCode.RightArrow;
 
     private AudioManager backGroundMusic;
-    private AudioManager sparkSound;
-    private AudioManager missSound;
+
+    private AudioSource audioSource;
 
     private long score;
 
     public static GameControl Instance { get; private set; }
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();    
+    }
 
     private void Start()
     {
@@ -40,12 +48,6 @@ public class GameControl : MonoBehaviour
         var background = GameObject.Find("BackGroundMusic");
         if (background != null) backGroundMusic = background.GetComponent<AudioSource>().GetComponent<AudioManager>();
         backGroundMusic.Play();
-
-        var spark = GameObject.Find("SparkSound");
-        if (spark != null) sparkSound = spark.GetComponent<AudioManager>();
-
-        var miss = GameObject.Find("MissSound");
-        if (miss != null) missSound = miss.GetComponent<AudioManager>();
 
         currentBlock = Instantiate(blockObjectPrefab, CreateRandomVectorRight(), Quaternion.identity);
     }
@@ -66,11 +68,11 @@ public class GameControl : MonoBehaviour
                     return;
                 }
                 playerLife--;
-                missSound.Play();
+                PlaySE(failureSE);
             }
             else
             {
-                sparkSound.Play();
+                PlaySE(successSE);
                 ChangeScore();
                 ChangeBlockWidth();
             }
@@ -88,11 +90,11 @@ public class GameControl : MonoBehaviour
                     return;
                 }
                 playerLife--;
-                missSound.Play();
+                PlaySE(failureSE);
             }
             else
             {
-                sparkSound.Play();
+                PlaySE(successSE);
                 ChangeScore();
                 ChangeBlockWidth();
             }
@@ -139,4 +141,11 @@ public class GameControl : MonoBehaviour
         score += 100;
         scoreBoard.text = score.ToString();
     }
+
+    private void PlaySE(AudioClip audioClip)
+    {
+        if (audioSource == null) return;
+        audioSource.PlayOneShot(audioClip);
+    }
+
 }
