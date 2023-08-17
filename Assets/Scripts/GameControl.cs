@@ -118,10 +118,13 @@ public class GameControl : MonoBehaviour
 
     public void GameOver()
     {
+        if (GameOverDialog.activeSelf) return;
         GameOverDialog.SetActive(true);
         audioBGM.Stop();
         PlaySE(fadeSE);
     }
+
+
 
     private bool CheckOverlap()
     {
