@@ -19,6 +19,10 @@ public class GameControl : MonoBehaviour
 
     public int playerLife = 3;
 
+    public AudioClip baseBGM;
+    public AudioClip strongBGM;
+
+    public AudioClip fadeSE;
     public AudioClip successSE;
     public AudioClip failureSE;
 
@@ -28,9 +32,8 @@ public class GameControl : MonoBehaviour
     private GameObject currentBlock;
     private KeyCode lastKeyPressed = KeyCode.RightArrow;
 
-    private AudioManager backGroundMusic;
-
     private AudioSource audioSource;
+    private AudioSource audioBGM;
 
     private long score;
 
@@ -38,16 +41,16 @@ public class GameControl : MonoBehaviour
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();    
+        audioSource = GetComponent<AudioSource>();
+        audioBGM = GetComponent<AudioSource>();
+        audioBGM.loop = true;
     }
 
     private void Start()
     {
         Instance = this;
 
-        var background = GameObject.Find("BackGroundMusic");
-        if (background != null) backGroundMusic = background.GetComponent<AudioSource>().GetComponent<AudioManager>();
-        backGroundMusic.Play();
+        PlayBGM(baseBGM);
 
         currentBlock = Instantiate(blockObjectPrefab, CreateRandomVectorRight(), Quaternion.identity);
     }
@@ -116,7 +119,8 @@ public class GameControl : MonoBehaviour
     public void GameOver()
     {
         GameOverDialog.SetActive(true);
-        backGroundMusic.Stop();
+        audioBGM.Stop();
+        PlaySE(fadeSE);
     }
 
     private bool CheckOverlap()
@@ -148,4 +152,11 @@ public class GameControl : MonoBehaviour
         audioSource.PlayOneShot(audioClip);
     }
 
+    private void PlayBGM(AudioClip audioClip)
+    {
+        if (audioBGM == null) return;
+        if (audioBGM.isPlaying) audioBGM.Stop();
+        audioBGM.clip = audioClip;
+        audioBGM.Play();
+    }
 }
