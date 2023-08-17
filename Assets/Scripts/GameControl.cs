@@ -18,6 +18,14 @@ public class GameControl : MonoBehaviour
     public TextMeshProUGUI scoreBoard;
 
     public int playerLife = 3;
+    public int successCombo = 20;
+
+    public AudioClip baseBGM;
+    public AudioClip strongBGM;
+
+    public AudioClip fadeSE;
+    public AudioClip successSE;
+    public AudioClip failureSE;
 
     private float positionY = -3.9f;
     private float minBlockWidth = 0.35f;
@@ -25,27 +33,26 @@ public class GameControl : MonoBehaviour
     private GameObject currentBlock;
     private KeyCode lastKeyPressed = KeyCode.RightArrow;
 
-    private AudioManager backGroundMusic;
-    private AudioManager sparkSound;
-    private AudioManager missSound;
+    private AudioSource audioSource;
+    private AudioSource audioBGM;
 
     private long score;
+    private long comboCount;
 
     public static GameControl Instance { get; private set; }
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioBGM = GetComponent<AudioSource>();
+        audioBGM.loop = true;
+    }
 
     private void Start()
     {
         Instance = this;
 
-        var background = GameObject.Find("BackGroundMusic");
-        if (background != null) backGroundMusic = background.GetComponent<AudioSource>().GetComponent<AudioManager>();
-        backGroundMusic.Play();
-
-        var spark = GameObject.Find("SparkSound");
-        if (spark != null) sparkSound = spark.GetComponent<AudioManager>();
-
-        var miss = GameObject.Find("MissSound");
-        if (miss != null) missSound = miss.GetComponent<AudioManager>();
+        PlayBGM(baseBGM);
 
         currentBlock = Instantiate(blockObjectPrefab, CreateRandomVectorRight(), Quaternion.identity);
     }
@@ -60,17 +67,21 @@ public class GameControl : MonoBehaviour
         {
             if (!CheckOverlap())
             {
-                if(playerLife == 0)
+                if (playerLife == 0)
                 {
                     GameOver();
                     return;
                 }
+                comboCount = 0;
+                if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
                 playerLife--;
-                missSound.Play();
+                PlaySE(failureSE);
             }
             else
             {
-                sparkSound.Play();
+                comboCount++;
+                if (comboCount >= successCombo && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
+                PlaySE(successSE);
                 ChangeScore();
                 ChangeBlockWidth();
             }
@@ -87,12 +98,16 @@ public class GameControl : MonoBehaviour
                     GameOver();
                     return;
                 }
+                comboCount = 0;
+                if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
                 playerLife--;
-                missSound.Play();
+                PlaySE(failureSE);
             }
             else
             {
-                sparkSound.Play();
+                comboCount++;
+                if (comboCount >= 10 && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
+                PlaySE(successSE);
                 ChangeScore();
                 ChangeBlockWidth();
             }
@@ -113,8 +128,10 @@ public class GameControl : MonoBehaviour
 
     public void GameOver()
     {
+        if (GameOverDialog.activeSelf) return;
         GameOverDialog.SetActive(true);
-        backGroundMusic.Stop();
+        audioBGM.Stop();
+        PlaySE(fadeSE);
     }
 
     private bool CheckOverlap()
@@ -138,5 +155,19 @@ public class GameControl : MonoBehaviour
     {
         score += 100;
         scoreBoard.text = score.ToString();
+    }
+
+    private void PlaySE(AudioClip audioClip)
+    {
+        if (audioSource == null) return;
+        audioSource.PlayOneShot(audioClip);
+    }
+
+    private void PlayBGM(AudioClip audioClip)
+    {
+        if (audioBGM == null) return;
+        if (audioBGM.isPlaying) audioBGM.Stop();
+        audioBGM.clip = audioClip;
+        audioBGM.Play();
     }
 }
