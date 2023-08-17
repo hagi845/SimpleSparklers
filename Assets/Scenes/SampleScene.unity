@@ -1217,6 +1217,7 @@ MonoBehaviour:
   ball: {fileID: 486672320}
   scoreBoard: {fileID: 1031043770}
   playerLife: 3
+  successCombo: 10
   baseBGM: {fileID: 8300000, guid: 7319e4072a7c64af2a0b75568c4c3f65, type: 3}
   strongBGM: {fileID: 8300000, guid: 5ad50937c986e4afcb7067de46443ec5, type: 3}
   fadeSE: {fileID: 8300000, guid: d1bb894e6772c419585dc0222a749fe4, type: 3}

@@ -18,6 +18,7 @@ public class GameControl : MonoBehaviour
     public TextMeshProUGUI scoreBoard;
 
     public int playerLife = 3;
+    public int successCombo = 20;
 
     public AudioClip baseBGM;
     public AudioClip strongBGM;
@@ -36,6 +37,7 @@ public class GameControl : MonoBehaviour
     private AudioSource audioBGM;
 
     private long score;
+    private long comboCount;
 
     public static GameControl Instance { get; private set; }
 
@@ -65,16 +67,20 @@ public class GameControl : MonoBehaviour
         {
             if (!CheckOverlap())
             {
-                if(playerLife == 0)
+                if (playerLife == 0)
                 {
                     GameOver();
                     return;
                 }
+                comboCount = 0;
+                if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
                 playerLife--;
                 PlaySE(failureSE);
             }
             else
             {
+                comboCount++;
+                if (comboCount >= successCombo && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
                 PlaySE(successSE);
                 ChangeScore();
                 ChangeBlockWidth();
@@ -92,11 +98,15 @@ public class GameControl : MonoBehaviour
                     GameOver();
                     return;
                 }
+                comboCount = 0;
+                if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
                 playerLife--;
                 PlaySE(failureSE);
             }
             else
             {
+                comboCount++;
+                if (comboCount >= 10 && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
                 PlaySE(successSE);
                 ChangeScore();
                 ChangeBlockWidth();
@@ -123,8 +133,6 @@ public class GameControl : MonoBehaviour
         audioBGM.Stop();
         PlaySE(fadeSE);
     }
-
-
 
     private bool CheckOverlap()
     {
