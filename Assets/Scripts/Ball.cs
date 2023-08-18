@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 public class Ball : MonoBehaviour
 {
@@ -6,7 +8,6 @@ public class Ball : MonoBehaviour
     public float incrementSpeed = 0.1f;
 
     private Rigidbody rb;
-    private KeyCode lastKeyPressed = KeyCode.RightArrow;
 
     void Start()
     {
@@ -14,19 +15,16 @@ public class Ball : MonoBehaviour
         rb.velocity = new Vector2(Speed,  0);
     }
 
-    void Update()
+    public void MoveLeft()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && lastKeyPressed != KeyCode.LeftArrow)
-        {
-            Speed += incrementSpeed;
-            rb.velocity = new Vector2(-Speed, rb.velocity.y);
-            lastKeyPressed = KeyCode.LeftArrow;
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) && lastKeyPressed != KeyCode.RightArrow)
-        {
-            Speed += incrementSpeed;
-            rb.velocity = new Vector2(Speed, rb.velocity.y);
-            lastKeyPressed = KeyCode.RightArrow;
-        }
+        Speed += incrementSpeed;
+        rb.velocity = new Vector2(-Speed, rb.velocity.y);
     }
+
+    public void MoveRight()
+    {
+        Speed += incrementSpeed;
+        rb.velocity = new Vector2(Speed, rb.velocity.y);
+    }
+
 }

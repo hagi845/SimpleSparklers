@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour
@@ -13,7 +15,7 @@ public class GameControl : MonoBehaviour
 
     public GameObject GameOverDialog;
 
-    public GameObject ball;
+    public Ball ball;
 
     public TextMeshProUGUI scoreBoard;
 
@@ -31,7 +33,7 @@ public class GameControl : MonoBehaviour
     private float minBlockWidth = 0.35f;
 
     private GameObject currentBlock;
-    private KeyCode lastKeyPressed = KeyCode.RightArrow;
+    private KeyControl lastKeyPressed;
 
     private AudioSource audioSource;
     private AudioSource audioBGM;
@@ -51,6 +53,7 @@ public class GameControl : MonoBehaviour
     private void Start()
     {
         Instance = this;
+        lastKeyPressed = Keyboard.current.rightArrowKey;
 
         PlayBGM(baseBGM);
 
@@ -62,59 +65,80 @@ public class GameControl : MonoBehaviour
         if (GameOverDialog.activeSelf) return;
         if (currentBlock == null) return;
 
-        // HACK: 重複しまくり
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && lastKeyPressed != KeyCode.LeftArrow)
-        {
-            if (!CheckOverlap())
-            {
-                if (playerLife == 0)
-                {
-                    GameOver();
-                    return;
-                }
-                comboCount = 0;
-                if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
-                playerLife--;
-                PlaySE(failureSE);
-            }
-            else
-            {
-                comboCount++;
-                if (comboCount >= successCombo && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
-                PlaySE(successSE);
-                ChangeScore();
-                ChangeBlockWidth();
-            }
+        var leftKey = Keyboard.current.leftArrowKey;
+        var rightKey = Keyboard.current.rightArrowKey;
 
-            currentBlock.transform.position = CreateRandomVectorLeft();
-            lastKeyPressed = KeyCode.LeftArrow;
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) && lastKeyPressed != KeyCode.RightArrow)
+        if (leftKey.wasPressedThisFrame )
         {
-            if (!CheckOverlap())
-            {
-                if (playerLife == 0)
-                {
-                    GameOver();
-                    return;
-                }
-                comboCount = 0;
-                if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
-                playerLife--;
-                PlaySE(failureSE);
-            }
-            else
-            {
-                comboCount++;
-                if (comboCount >= 10 && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
-                PlaySE(successSE);
-                ChangeScore();
-                ChangeBlockWidth();
-            }
-
-            currentBlock.transform.position = CreateRandomVectorRight();
-            lastKeyPressed = KeyCode.RightArrow;
+            ActionLeft();
         }
+        else if (rightKey.wasPressedThisFrame )
+        {
+            ActionRight();
+        }
+    }
+
+    // HACK: 重複しまくり
+    public void ActionLeft()
+    {
+        var leftKey = Keyboard.current.leftArrowKey;
+        if (lastKeyPressed == leftKey) return;
+
+        if (!CheckOverlap())
+        {
+            if (playerLife == 0)
+            {
+                GameOver();
+                return;
+            }
+            comboCount = 0;
+            if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
+            playerLife--;
+            PlaySE(failureSE);
+        }
+        else
+        {
+            comboCount++;
+            if (comboCount >= successCombo && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
+            PlaySE(successSE);
+            ChangeScore();
+            ChangeBlockWidth();
+        }
+        ball.MoveLeft();
+        currentBlock.transform.position = CreateRandomVectorLeft();
+        lastKeyPressed = leftKey;
+    }
+
+    // HACK: 重複しまくり
+    public void ActionRight()
+    {
+        var rightKey = Keyboard.current.rightArrowKey;
+        if (lastKeyPressed == rightKey) return;
+
+        if (!CheckOverlap())
+        {
+            if (playerLife == 0)
+            {
+                GameOver();
+                return;
+            }
+            comboCount = 0;
+            if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
+            playerLife--;
+            PlaySE(failureSE);
+        }
+        else
+        {
+            comboCount++;
+            if (comboCount >= 10 && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
+            PlaySE(successSE);
+            ChangeScore();
+            ChangeBlockWidth();
+        }
+
+        ball.MoveRight();
+        currentBlock.transform.position = CreateRandomVectorRight();
+        lastKeyPressed = rightKey;
     }
 
     private Vector2 CreateRandomVectorLeft() => CreateRandomVector(-6.5f, -1.5f);
