@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour
@@ -31,7 +33,7 @@ public class GameControl : MonoBehaviour
     private float minBlockWidth = 0.35f;
 
     private GameObject currentBlock;
-    private KeyCode lastKeyPressed = KeyCode.RightArrow;
+    private KeyControl lastKeyPressed;
 
     private AudioSource audioSource;
     private AudioSource audioBGM;
@@ -51,6 +53,7 @@ public class GameControl : MonoBehaviour
     private void Start()
     {
         Instance = this;
+        lastKeyPressed = Keyboard.current.rightArrowKey;
 
         PlayBGM(baseBGM);
 
@@ -62,8 +65,11 @@ public class GameControl : MonoBehaviour
         if (GameOverDialog.activeSelf) return;
         if (currentBlock == null) return;
 
+        var leftKey = Keyboard.current.leftArrowKey;
+        var rightKey = Keyboard.current.rightArrowKey;
+
         // HACK: 重複しまくり
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && lastKeyPressed != KeyCode.LeftArrow)
+        if (leftKey.wasPressedThisFrame && lastKeyPressed != leftKey)
         {
             if (!CheckOverlap())
             {
@@ -87,9 +93,9 @@ public class GameControl : MonoBehaviour
             }
 
             currentBlock.transform.position = CreateRandomVectorLeft();
-            lastKeyPressed = KeyCode.LeftArrow;
+            lastKeyPressed = leftKey;
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) && lastKeyPressed != KeyCode.RightArrow)
+        else if (rightKey.wasPressedThisFrame && lastKeyPressed != rightKey)
         {
             if (!CheckOverlap())
             {
@@ -113,7 +119,7 @@ public class GameControl : MonoBehaviour
             }
 
             currentBlock.transform.position = CreateRandomVectorRight();
-            lastKeyPressed = KeyCode.RightArrow;
+            lastKeyPressed = rightKey;
         }
     }
 
