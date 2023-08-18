@@ -68,59 +68,76 @@ public class GameControl : MonoBehaviour
         var leftKey = Keyboard.current.leftArrowKey;
         var rightKey = Keyboard.current.rightArrowKey;
 
-        // HACK: 重複しまくり
-        if (leftKey.wasPressedThisFrame && lastKeyPressed != leftKey)
+        if (leftKey.wasPressedThisFrame )
         {
-            if (!CheckOverlap())
-            {
-                if (playerLife == 0)
-                {
-                    GameOver();
-                    return;
-                }
-                comboCount = 0;
-                if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
-                playerLife--;
-                PlaySE(failureSE);
-            }
-            else
-            {
-                comboCount++;
-                if (comboCount >= successCombo && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
-                PlaySE(successSE);
-                ChangeScore();
-                ChangeBlockWidth();
-            }
-
-            currentBlock.transform.position = CreateRandomVectorLeft();
-            lastKeyPressed = leftKey;
+            ActionLeft();
         }
-        else if (rightKey.wasPressedThisFrame && lastKeyPressed != rightKey)
+        else if (rightKey.wasPressedThisFrame )
         {
-            if (!CheckOverlap())
-            {
-                if (playerLife == 0)
-                {
-                    GameOver();
-                    return;
-                }
-                comboCount = 0;
-                if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
-                playerLife--;
-                PlaySE(failureSE);
-            }
-            else
-            {
-                comboCount++;
-                if (comboCount >= 10 && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
-                PlaySE(successSE);
-                ChangeScore();
-                ChangeBlockWidth();
-            }
-
-            currentBlock.transform.position = CreateRandomVectorRight();
-            lastKeyPressed = rightKey;
+            ActionRight();
         }
+    }
+
+    // HACK: 重複しまくり
+    public void ActionLeft()
+    {
+        var leftKey = Keyboard.current.leftArrowKey;
+        if (lastKeyPressed == leftKey) return;
+
+        if (!CheckOverlap())
+        {
+            if (playerLife == 0)
+            {
+                GameOver();
+                return;
+            }
+            comboCount = 0;
+            if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
+            playerLife--;
+            PlaySE(failureSE);
+        }
+        else
+        {
+            comboCount++;
+            if (comboCount >= successCombo && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
+            PlaySE(successSE);
+            ChangeScore();
+            ChangeBlockWidth();
+        }
+
+        currentBlock.transform.position = CreateRandomVectorLeft();
+        lastKeyPressed = leftKey;
+    }
+
+    // HACK: 重複しまくり
+    public void ActionRight()
+    {
+        var rightKey = Keyboard.current.rightArrowKey;
+        if (lastKeyPressed == rightKey) return;
+
+        if (!CheckOverlap())
+        {
+            if (playerLife == 0)
+            {
+                GameOver();
+                return;
+            }
+            comboCount = 0;
+            if (audioBGM.clip != baseBGM) PlayBGM(baseBGM);
+            playerLife--;
+            PlaySE(failureSE);
+        }
+        else
+        {
+            comboCount++;
+            if (comboCount >= 10 && audioBGM.clip != strongBGM) PlayBGM(strongBGM);
+            PlaySE(successSE);
+            ChangeScore();
+            ChangeBlockWidth();
+        }
+
+        currentBlock.transform.position = CreateRandomVectorRight();
+        lastKeyPressed = rightKey;
     }
 
     private Vector2 CreateRandomVectorLeft() => CreateRandomVector(-6.5f, -1.5f);
