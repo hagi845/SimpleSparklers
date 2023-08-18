@@ -15,7 +15,7 @@ public class GameControl : MonoBehaviour
 
     public GameObject GameOverDialog;
 
-    public GameObject ball;
+    public Ball ball;
 
     public TextMeshProUGUI scoreBoard;
 
@@ -104,7 +104,7 @@ public class GameControl : MonoBehaviour
             ChangeScore();
             ChangeBlockWidth();
         }
-
+        ball.MoveLeft();
         currentBlock.transform.position = CreateRandomVectorLeft();
         lastKeyPressed = leftKey;
     }
@@ -136,6 +136,7 @@ public class GameControl : MonoBehaviour
             ChangeBlockWidth();
         }
 
+        ball.MoveRight();
         currentBlock.transform.position = CreateRandomVectorRight();
         lastKeyPressed = rightKey;
     }
