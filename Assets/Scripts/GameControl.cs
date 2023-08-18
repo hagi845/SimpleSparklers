@@ -18,6 +18,7 @@ public class GameControl : MonoBehaviour
     public Ball ball;
 
     public TextMeshProUGUI scoreBoard;
+    public TextMeshProUGUI highScoreBoard;
 
     public int playerLife = 3;
     public int successCombo = 20;
@@ -157,8 +158,7 @@ public class GameControl : MonoBehaviour
         audioBGM.Stop();
         PlaySE(fadeSE);
         ScoreControl.Instance.SaveForHighScore(score);
-        Debug.Log("gemeover highscore: " + ScoreControl.Instance.HighScore);
-
+        highScoreBoard.text = $"HIGH SCORE: {ScoreControl.Instance.HighScore}";
     }
 
     private bool CheckOverlap()
