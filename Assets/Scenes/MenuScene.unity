@@ -651,6 +651,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1792270909}
   - component: {fileID: 1792270910}
+  - component: {fileID: 1792270911}
   m_Layer: 0
   m_Name: GameStartControl
   m_TagString: Untagged
@@ -683,6 +684,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f1fee917e8f7442f8cec9b7028dace8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1792270911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1792270908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d59fa130912481d9115d2d39a92c10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1875280676

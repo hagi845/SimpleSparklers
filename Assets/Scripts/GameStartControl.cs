@@ -12,6 +12,9 @@ public class GameStartControl : MonoBehaviour
         var background = GameObject.Find("BGM");
         if (background != null) bgm = background.GetComponent<AudioSource>().GetComponent<AudioManager>();
         bgm.Play();
+
+
+        Debug.Log("gamestart highscore: " + ScoreControl.Instance.HighScore);
     }
 
     public void StartGame()

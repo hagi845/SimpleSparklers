@@ -38,8 +38,8 @@ public class GameControl : MonoBehaviour
     private AudioSource audioSource;
     private AudioSource audioBGM;
 
-    private long score;
-    private long comboCount;
+    private int score;
+    private int comboCount;
 
     public static GameControl Instance { get; private set; }
 
@@ -156,6 +156,9 @@ public class GameControl : MonoBehaviour
         GameOverDialog.SetActive(true);
         audioBGM.Stop();
         PlaySE(fadeSE);
+        ScoreControl.Instance.SaveForHighScore(score);
+        Debug.Log("gemeover highscore: " + ScoreControl.Instance.HighScore);
+
     }
 
     private bool CheckOverlap()
